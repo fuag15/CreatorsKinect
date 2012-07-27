@@ -6,12 +6,13 @@ import toxi.physics2d.*;
 import toxi.geom.*;
 
 import SimpleOpenNI.*;
-import ddf.minim.*;
-import ddf.minim.analysis.*;
 
 import codeanticode.glgraphics.*;
 import javax.media.opengl.*;
 import java.util.*;
+
+import ddf.minim.*;
+import ddf.minim.analysis.*;
 
 import controlP5.*;
 ControlP5 cp5;
@@ -48,6 +49,11 @@ String watchdogFile = "/tmp/watching-the-clock";
 String settingsFile = "settings.conf";
 HashMap<String, String> settings;
 
+Minim minim;
+AudioPlayer song;
+BeatDetect beat;
+BeatListener bl;
+
 void setup() {
   size(screenWidth, screenHeight-1, GLConstants.GLGRAPHICS);
  
@@ -58,7 +64,7 @@ void setup() {
  
   kinectManager = new KinectManager(this);
   handTracker = new HandTracker(this);
- 
+  
   //generateStatic();
  
   //size(kinect.depthWidth(), kinect.depthHeight());
@@ -71,7 +77,14 @@ void setup() {
   photoArranger = new PhotoArranger(this);
   
   frameRate(45);
-
+  
+  minim = new Minim(this);
+  
+  song = minim.loadFile("song.mp3", 2048);
+  song.play();
+  beat = new BeatDetect(song.bufferSize(), song.sampleRate());
+  beat.setSensitivity(300); 
+  bl = new BeatListener(beat, song);  
   // Stop tearing
   GLGraphics pgl = (GLGraphics) g; //processing graphics object
   GL gl = pgl.beginGL(); //begin opengl
@@ -260,3 +273,9 @@ void safeShutdown() {
   saveStrings(watchdogFile, out);
   exit();
 }
+void stop() {
+  song.close();
+  minim.stop();
+  super.stop();
+}
+
