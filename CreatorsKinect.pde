@@ -55,8 +55,10 @@ BeatDetect beat;
 BeatListener bl;
 
 void setup() {
+   
+  
   size(screenWidth, screenHeight-1, GLConstants.GLGRAPHICS);
- 
+  
   loadSettings();
   setupConfigScreen();
   
@@ -73,18 +75,20 @@ void setup() {
   textFont(infoFont);
   
   creatorsTag = new GLTexture(this, settings.get("hashtag-image"));
-
+  
+  //set up sound
+  minim = new Minim(this);
+  song = minim.loadFile("song.mp3", 1024);
+  song.play();
+  beat = new BeatDetect(song.bufferSize(), song.sampleRate());
+  beat.setSensitivity(10); 
+  bl = new BeatListener(beat, song); 
+  
   photoArranger = new PhotoArranger(this);
   
   frameRate(45);
   
-  minim = new Minim(this);
   
-  song = minim.loadFile("song.mp3", 2048);
-  song.play();
-  beat = new BeatDetect(song.bufferSize(), song.sampleRate());
-  beat.setSensitivity(300); 
-  bl = new BeatListener(beat, song);  
   // Stop tearing
   GLGraphics pgl = (GLGraphics) g; //processing graphics object
   GL gl = pgl.beginGL(); //begin opengl

@@ -34,6 +34,8 @@ class Photo extends VerletParticle2D implements Runnable {
   boolean backLoading = false;
   boolean frontLoading = false;
   
+  BeatDetect beat;
+  
   int side = 1;
   int lastSide = 1;
   
@@ -41,6 +43,9 @@ class Photo extends VerletParticle2D implements Runnable {
 
   int age = 1;
   int flipStep = 0;
+  float beatFactorKick = 0;
+  float beatFactorSnare = 0;
+  float beatFactorHat = 0;
   float angleY = 0; float angleYTarget = 0;
   float angleX = 0; float angleXTarget = 0;
   float angleK = 0.05;
@@ -82,6 +87,7 @@ class Photo extends VerletParticle2D implements Runnable {
      this.parent = _parent;
      this.frontURL = _url;
      this.size = _size;
+     beat = this.parent.applet.beat;
      //this.position = new PVector(0,0,0);
      //this.velocity = new PVector(0,0,0);
      //this.positionTarget = position.get();
@@ -301,31 +307,38 @@ class Photo extends VerletParticle2D implements Runnable {
   }
   
   void setVertices() {
+    //if(beat.isKick()) {
+    //  beatFactorKick = 16;
+    //}
+    //if(beat.isSnare()){
+    //  beatFactorKick = 16;
+    //}
+    if(beat.isHat()){
+      beatFactorKick = 16;
+    }
     float a = cos(radians(angleY+flipY));
     float b = sin(radians(angleY+flipY)); 
     //float g = -parent.gridSpace/2 * zoomLevel;
     float g = -(size*scale)/2 * zoomLevel;
     
     texturedQuad.beginUpdateVertices();
-      texturedQuad.updateVertex(0, x,y);  // Center point
-      texturedQuad.updateVertex(1, g*a + x,  g - b*g*PERSPECTIVE_FACTOR + y);
-      texturedQuad.updateVertex(2, g*a + x, -g + b*g*PERSPECTIVE_FACTOR + y);
-      texturedQuad.updateVertex(3, -g*a + x, -g - b*g*PERSPECTIVE_FACTOR + y);
-      texturedQuad.updateVertex(4, -g*a + x,  g + b*g*PERSPECTIVE_FACTOR + y);
-      texturedQuad.updateVertex(5, g*a + x,  g - b*g*PERSPECTIVE_FACTOR + y); 
+      texturedQuad.updateVertex(0, x,y, beatFactorKick);  // Center point
+      texturedQuad.updateVertex(1, g*a + x,  g - b*g*PERSPECTIVE_FACTOR + y, beatFactorKick);
+      texturedQuad.updateVertex(2, g*a + x, -g + b*g*PERSPECTIVE_FACTOR + y, beatFactorKick);
+      texturedQuad.updateVertex(3, -g*a + x, -g - b*g*PERSPECTIVE_FACTOR + y, beatFactorKick);
+      texturedQuad.updateVertex(4, -g*a + x,  g + b*g*PERSPECTIVE_FACTOR + y, beatFactorKick);
+      texturedQuad.updateVertex(5, g*a + x,  g - b*g*PERSPECTIVE_FACTOR + y, beatFactorKick); 
     texturedQuad.endUpdateVertices();
     
     float k = 1.2;
     dropshadowQuad.beginUpdateVertices();
-      dropshadowQuad.updateVertex(0, x,y);  // Center point
-      dropshadowQuad.updateVertex(1, k*g*a + x,  k*g - k*b*g*PERSPECTIVE_FACTOR + y);
-      dropshadowQuad.updateVertex(2, k*g*a + x, -k*g + k*b*g*PERSPECTIVE_FACTOR + y);
-      dropshadowQuad.updateVertex(3, -k*g*a + x, -k*g - k*b*g*PERSPECTIVE_FACTOR + y);
-      dropshadowQuad.updateVertex(4, -k*g*a + x,  k*g + k*b*g*PERSPECTIVE_FACTOR + y);
-      dropshadowQuad.updateVertex(5, k*g*a + x,  k*g - k*b*g*PERSPECTIVE_FACTOR + y); 
+      dropshadowQuad.updateVertex(0, x,y, beatFactorKick);  // Center point
+      dropshadowQuad.updateVertex(1, k*g*a + x,  k*g - k*b*g*PERSPECTIVE_FACTOR + y, beatFactorKick);
+      dropshadowQuad.updateVertex(2, k*g*a + x, -k*g + k*b*g*PERSPECTIVE_FACTOR + y, beatFactorKick);
+      dropshadowQuad.updateVertex(3, -k*g*a + x, -k*g - k*b*g*PERSPECTIVE_FACTOR + y, beatFactorKick);
+      dropshadowQuad.updateVertex(4, -k*g*a + x,  k*g + k*b*g*PERSPECTIVE_FACTOR + y, beatFactorKick);
+      dropshadowQuad.updateVertex(5, k*g*a + x,  k*g - k*b*g*PERSPECTIVE_FACTOR + y, beatFactorKick); 
     dropshadowQuad.endUpdateVertices();    
-    
-
     
     texturedQuad.beginUpdateColors();
     for (int i = 0; i < 6; i++) {
@@ -338,6 +351,9 @@ class Photo extends VerletParticle2D implements Runnable {
       dropshadowQuad.updateColor(i,255,0,255, opacity * 128);
     }
     dropshadowQuad.endUpdateColors();
+    beatFactorKick = beatFactorKick * 0.95;
+    beatFactorSnare = beatFactorSnare * 0.95;
+    beatFactorHat = beatFactorHat * 0.95;
   }
   
   void draw() {
