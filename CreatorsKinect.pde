@@ -6,6 +6,8 @@ import toxi.physics2d.*;
 import toxi.geom.*;
 
 import SimpleOpenNI.*;
+import ddf.minim.*;
+import ddf.minim.analysis.*;
 
 import codeanticode.glgraphics.*;
 import javax.media.opengl.*;
