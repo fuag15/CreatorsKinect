@@ -307,16 +307,15 @@ class Photo extends VerletParticle2D implements Runnable {
   }
   
   void setVertices() {
+    beatMode = this.parent.applet.beatMode;
     if( this.parent.applet.doBeat){
-      if(beat.isKick()) {
+      if(beatMode == 0 && beat.isKick()) {
+        beatFactorKick = 16;
+      } else if(beatMode == 1 && beat.isSnare()) {
+        beatFactorKick = 16;
+      } else if(beatMode == 2 && beat.isHat()) {
         beatFactorKick = 16;
       }
-      //if(beat.isSnare()){
-      //  beatFactorKick = 16;
-      //}
-      //if(beat.isHat()){
-      //  beatFactorKick = 16;
-      //}
     } else {
       beatFactorKick = 0;
     }

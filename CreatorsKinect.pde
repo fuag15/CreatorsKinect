@@ -36,6 +36,7 @@ static final int HASHTAG_SIZE = 10;
 int hashtagPosition = 0;
 boolean showHashtag = true;
 boolean doBeat = true;
+int beatMode = 0;
 
 PhotoArranger photoArranger;
 
@@ -187,6 +188,9 @@ void keyPressed() {
       break;
     case 'b':
       doBeat = !doBeat;
+      break;
+    case 'm':
+      beatMode = (beatMode + 1) % 3;
       break;
   }
   if(key == ']') photoArranger.setGridDimensions(photoArranger.gridRows + 1, photoArranger.gridCols);
