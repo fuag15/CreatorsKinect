@@ -35,6 +35,7 @@ static final int HASHTAG_FADE_TIME = 960;
 static final int HASHTAG_SIZE = 10;
 int hashtagPosition = 0;
 boolean showHashtag = true;
+boolean doBeat = true;
 
 PhotoArranger photoArranger;
 
@@ -183,6 +184,9 @@ void keyPressed() {
       break;    
     case ' ':
       configuring = !configuring;
+      break;
+    case 'b':
+      doBeat = !doBeat;
       break;
   }
   if(key == ']') photoArranger.setGridDimensions(photoArranger.gridRows + 1, photoArranger.gridCols);

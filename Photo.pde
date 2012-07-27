@@ -307,14 +307,18 @@ class Photo extends VerletParticle2D implements Runnable {
   }
   
   void setVertices() {
-    //if(beat.isKick()) {
-    //  beatFactorKick = 16;
-    //}
-    //if(beat.isSnare()){
-    //  beatFactorKick = 16;
-    //}
-    if(beat.isHat()){
-      beatFactorKick = 16;
+    if( this.parent.applet.doBeat){
+      if(beat.isKick()) {
+        beatFactorKick = 16;
+      }
+      //if(beat.isSnare()){
+      //  beatFactorKick = 16;
+      //}
+      //if(beat.isHat()){
+      //  beatFactorKick = 16;
+      //}
+    } else {
+      beatFactorKick = 0;
     }
     float a = cos(radians(angleY+flipY));
     float b = sin(radians(angleY+flipY)); 
