@@ -55,11 +55,14 @@ Minim minim;
 AudioPlayer song;
 BeatDetect beat;
 BeatListener bl;
+GLSLShader shader;
 
 void setup() {
    
   
   size(screenWidth, screenHeight-1, GLConstants.GLGRAPHICS);
+  
+  //shader = new GLSLShader(this, "position.vert", "sharpen.frag");
   
   loadSettings();
   setupConfigScreen();
@@ -108,7 +111,7 @@ void draw(){
    colorMode(RGB);
   tint(1,1,1,1);
   staticImages[staticImageIndex].render();
-  */
+  */  
   
   if(second() < 30)          photoArranger.setMode(2);
   else if(minute() % 2 == 0) photoArranger.setMode(3);
@@ -122,9 +125,14 @@ void draw(){
   handTracker.draw();  
   renderer = (GLGraphics)g;
   renderer.beginGL();
+    //shader.start();
+    //shader.setFloatUniform("width", 422.0);
+    //shader.setFloatUniform("height", 422.0);
     photoArranger.update();
     photoArranger.draw();
+    //shader.stop();
   renderer.endGL(); 
+  
   
   if(showHashtag) drawHashtag();
   
