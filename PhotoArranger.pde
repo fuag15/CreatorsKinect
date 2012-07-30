@@ -174,6 +174,9 @@ class PhotoArranger {
     depthSort();
     loader.update(); 
     Photo _p;
+    
+    updateBeat();
+    
     for(int i=0; i<photos.size(); i++) {
       _p = photos.get(i);
       _p.update();
@@ -344,6 +347,27 @@ class PhotoArranger {
     updateActivePhotos();
   }
   
+  void updateBeat() {
+    beatMode = this.applet.beatMode;
+    beat = this.applet.beat;
+    if( this.applet.doBeat){
+      if(beatMode == 0 && beat.isKick()) {
+        setPercentBeats();
+      } else if(beatMode == 1 && beat.isSnare()) {
+        setPercentBeats();
+      } else if(beatMode == 2 && beat.isHat()) {
+        setPercentBeats();
+      }
+    }
+  }
+  
+  void setPercentBeats(){
+    float percentage = photos.size() * 0.2;
+    for(int i=0; i < percentage; i++) {
+      photos.get((int)random(0,photos.size())).setBeatFactorKick();
+    }
+  }
+  
   
   void updateActivePhotos() {
     for(int i=0; i<activePhotoAttractors.size(); i++) {
@@ -387,7 +411,7 @@ class PhotoArranger {
     }
   }
   void draw() {
-    //depthSort();
+    depthSort();
     for(int i=0; i<photos.size(); i++)
       photos.get(i).draw();
   }

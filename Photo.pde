@@ -306,19 +306,23 @@ class Photo extends VerletParticle2D implements Runnable {
 
   }
   
+  void setBeatFactorKick(){
+    beatFactorKick = 16;
+  }
+  
   void setVertices() {
-    beatMode = this.parent.applet.beatMode;
-    if( this.parent.applet.doBeat){
-      if(beatMode == 0 && beat.isKick()) {
-        beatFactorKick = 16;
-      } else if(beatMode == 1 && beat.isSnare()) {
-        beatFactorKick = 16;
-      } else if(beatMode == 2 && beat.isHat()) {
-        beatFactorKick = 16;
-      }
-    } else {
-      beatFactorKick = 0;
-    }
+    //beatMode = this.parent.applet.beatMode;
+    //if( this.parent.applet.doBeat){
+    //  if(beatMode == 0 && beat.isKick()) {
+    //    beatFactorKick = 16;
+    //  } else if(beatMode == 1 && beat.isSnare()) {
+    //    beatFactorKick = 16;
+    //  } else if(beatMode == 2 && beat.isHat()) {
+    //    beatFactorKick = 16;
+    //  }
+    //} else {
+    //  beatFactorKick = 0;
+    //}
     float a = cos(radians(angleY+flipY));
     float b = sin(radians(angleY+flipY)); 
     //float g = -parent.gridSpace/2 * zoomLevel;
@@ -357,6 +361,9 @@ class Photo extends VerletParticle2D implements Runnable {
     beatFactorKick = beatFactorKick * 0.95;
     beatFactorSnare = beatFactorSnare * 0.95;
     beatFactorHat = beatFactorHat * 0.95;
+    if (beatFactorKick <= 1) {
+      beatFactorKick = 0;
+    }
   }
   
   void draw() {
